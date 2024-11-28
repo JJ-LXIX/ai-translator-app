@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import React from "react";
-import TranslationForm from "../Components/Header/TranslationForm/TranslationForm";
+import TranslationForm from "../Components/TranslationForm/TranslationForm";
 
 export type TranslationLanguages = {
   translation: {
@@ -29,7 +29,7 @@ export default async function TranslatePage({}) {
   const languages = (await response.json()) as TranslationLanguages;
 
   return (
-    <div>
+    <div className="px-10 xl:px-0 mb-20">
       {/* Translation Form */}
       <TranslationForm languages={languages} />
 
