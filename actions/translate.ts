@@ -4,6 +4,7 @@ import { State } from "@/app/Components/TranslationForm/TranslationForm";
 import { addOrUpdateUser, ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
+import { revalidateTag } from "next/cache";
 import { v4 } from "uuid";
 
 const endpoint = process.env.AZURE_TEXT_TRANSLATION;
@@ -69,6 +70,8 @@ async function translate(prevState: State, formData: FormData) {
   } catch (error) {
     console.log("Error adding translation to user: ", error);
   }
+
+  revalidateTag("translationHistory");
 
   return {
     ...prevState,
