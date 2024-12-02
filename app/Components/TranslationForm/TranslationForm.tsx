@@ -13,6 +13,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import translate from "@/actions/translate";
 import { LetterText, Volume2Icon } from "lucide-react";
+import SubmitButton from "../SubmitButton/SubmitButton";
 import { Button } from "@/components/ui/button";
 import Recorder, { mimeType } from "../Recorder/Recorder";
 
@@ -33,12 +34,6 @@ function TranslationForm({ languages }: Props) {
   const [output, setOutput] = useState("");
   const [state, formAction] = useActionState(translate, initialState);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (state.output) {
-      setOutput(state.output);
-    }
-  }, [state]);
 
   useEffect(() => {
     if (!input.trim()) return;
@@ -87,17 +82,17 @@ function TranslationForm({ languages }: Props) {
   return (
     <div>
       <form action={formAction}>
-      <div className="flex space-x-2">
-        <div className="flex items-center group cursor-pointer border rounded-md w-fit px-3 py-2 bg-[#e7f0fe] mb-5">
-          <LetterText />
-          <p className="text-sm font-medium text-blue-500 group-hover:underline ml-2 ">
-            Text
-          </p>
-        </div>
-          <Recorder uploadAudio={uploadAudio} />
-      </div>
+        <div className="flex space-x-2">
+          <div className="flex items-center group cursor-pointer border rounded-md w-fit px-3 py-2 bg-[#e7f0fe] mb-5">
+            <LetterText />
+            <p className="text-sm font-medium text-blue-500 group-hover:underline ml-2 ">
+              Text
+            </p>
+          </div>
 
-      <form action={formAction}>
+          <Recorder uploadAudio={uploadAudio} />
+        </div>
+
         <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
           {/* Left Side Input */}
           <div className="flex-1 space-y-2">
@@ -135,29 +130,33 @@ function TranslationForm({ languages }: Props) {
 
           {/* Right Side Input */}
           <div className="flex-1 space-y-2">
-            <Select name="outputLanguage" defaultValue="hi">
-              <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
+            <div className="flex items-center justify-between">
+              <Select name="outputLanguage" defaultValue="hi">
+                <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
 
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Let us figure it out!</SelectLabel>
-                  <SelectItem key="auto" value="auto">
-                    Auto-Detect
-                  </SelectItem>
-                </SelectGroup>
-
-                <SelectGroup>
-                  <SelectLabel>Languages</SelectLabel>
-                  {Object.entries(languages.translation).map(([key, value]) => (
-                    <SelectItem key={key} value={key}>
-                      {value.name}
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Let us figure it out!</SelectLabel>
+                    <SelectItem key="auto" value="auto">
+                      Auto-Detect
                     </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                  </SelectGroup>
+
+                  <SelectGroup>
+                    <SelectLabel>Languages</SelectLabel>
+                    {Object.entries(languages.translation).map(
+                      ([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          {value.name}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
               <Button
                 variant="ghost"
                 type="button"
@@ -181,10 +180,9 @@ function TranslationForm({ languages }: Props) {
           </div>
         </div>
 
-        <div>
-          <button type="submit" ref={submitBtnRef}>
-            Submit
-          </button>
+        <div className="mt-5 flex justify-end">
+          <SubmitButton disabled={!input} />
+          <button type="submit" ref={submitBtnRef} hidden />
         </div>
       </form>
     </div>
